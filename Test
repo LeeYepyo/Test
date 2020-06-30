@@ -1,0 +1,73 @@
+// Question 1
+// a. Write a function that returns all the possible paths between A­-H.
+
+// To find all the possible paths
+function findAllPaths (start, end) {
+	visited[start] = 1; // 0: unvisited 1: visited
+	path.push(start);
+
+	if (start == end) {
+		const letters = [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' ];
+		let newPath = [];
+		for (let num of path) {
+			newPath.push(letters[num]);
+		}
+		paths.push(newPath);
+		console.log(newPath.join(' - ')); // Displaying answers
+		path.pop();
+		return;
+	}
+
+	for (let i = 0; i < 8; i++) {
+		// If the node is connected and is not visited
+		if (graph[start][i] == 1 && visited[i] == 0) {
+			findAllPaths(i, end);
+			visited[i] = 0;
+		}
+	}
+	path.pop();
+}
+
+// b. Write a function that returns the least number of hops (shortest path) between A­-H.
+
+// To find the shortest path
+function findShortest (paths) {
+	let pathLengths = [];
+	for (path of paths) {
+		pathLengths.push(path.length);
+	}
+	let index = pathLengths.indexOf(Math.min(...pathLengths));
+	console.log(`The shortest path is ${paths[index].join(' - ')}`);
+}
+
+// Adjacency Matrix
+const graph = [
+	[ 0, 1, 0, 1, 0, 0, 0, 0 ],
+	[ 1, 0, 1, 1, 0, 0, 0, 0 ],
+	[ 0, 1, 0, 1, 0, 1, 0, 0 ],
+	[ 1, 1, 1, 0, 1, 0, 0, 0 ],
+	[ 0, 0, 0, 1, 0, 1, 0, 1 ],
+	[ 0, 0, 1, 0, 1, 0, 1, 0 ],
+	[ 0, 0, 0, 0, 0, 1, 0, 1 ],
+	[ 1, 0, 0, 0, 0, 0, 1, 0 ]
+];
+let visited = [ 0, 0, 0, 0, 0, 0, 0, 0 ];
+let path = [];
+let paths = [];
+
+findAllPaths(0, 7); // A to H
+findShortest(paths);
+
+// Question 2
+
+async function getData () {
+	const response = await axios.get(
+		'https://next.json-generator.com/api/json/get/41P1_UhSI'
+	);
+
+	for (let obj of response.data) {
+		console.log(`${obj.name.first} ${obj.name.last}`);
+	}
+}
+
+getData();
